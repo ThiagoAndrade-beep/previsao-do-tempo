@@ -52,7 +52,7 @@ btnLoc.addEventListener("click", () => {
     const result = document.getElementById("resultado")
     result.innerHTML = ""
 
-    const urlLoc = "http://ip-api.com/json/"
+    const urlLoc = "https://ipapi.co/json/"
     fetch(urlLoc)
     .then(response => {
         console.log(response)
@@ -61,7 +61,7 @@ btnLoc.addEventListener("click", () => {
     .then(data => {
         console.log(data)
         const city = data.city
-        const region = data.region
+        const region = data.region_code
         resultLoc.innerHTML = `Tempo agora em ${city}, ${region}`
         
         
