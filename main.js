@@ -5,6 +5,11 @@ const resultClima = document.getElementById("clima")
 const resultUmidade = document.getElementById("umidade")
 const resultPressao = document.getElementById("pressao")
 
+function toggleLoading(show) {
+    const loadingDiv = document.getElementById("loading");
+    loadingDiv.style.display = show ? "block" : "none";
+}
+
 buscarBtn.addEventListener("click", () => {
     const buscarInput = document.getElementById("cidade")
     const input = buscarInput.value
@@ -12,6 +17,8 @@ buscarBtn.addEventListener("click", () => {
     const resultLoc = document.getElementById("resultado-loc")
 
     resultLoc.innerHTML = ""
+
+    toggleLoading(true)
 
 
     const apiKey = "3f77da438c85bb37b4cb2f0517753764"
@@ -45,6 +52,10 @@ buscarBtn.addEventListener("click", () => {
             result.innerHTML = `Erro: ${error.message}`//esse parametro estava vazio, ja que eu so estava passando throw new error la em cima
         })
 
+        .finally(() => {
+            toggleLoading(false);
+        })
+
 })
 
 btnLoc.addEventListener("click", () => {
@@ -52,19 +63,21 @@ btnLoc.addEventListener("click", () => {
     const result = document.getElementById("resultado")
     result.innerHTML = ""
 
+    toggleLoading(true)
+
     const urlLoc = "https://ipapi.co/json/"
     fetch(urlLoc)
-    .then(response => {
-        console.log(response)
-        return response.json()
-    })
-    .then(data => {
-        console.log(data)
-        const city = data.city
-        const region = data.region_code
-        resultLoc.innerHTML = `Tempo agora em ${city}, ${region}`
-        
-        
+        .then(response => {
+            console.log(response)
+            return response.json()
+        })
+        .then(data => {
+            console.log(data)
+            const city = data.city
+            const region = data.region_code
+            resultLoc.innerHTML = `Tempo agora em ${city}, ${region}`
+
+
             const apiKey = "3f77da438c85bb37b4cb2f0517753764"
             const urlTempo = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`
 
@@ -92,6 +105,10 @@ btnLoc.addEventListener("click", () => {
                 })
                 .catch(error => {
                     result.innerHTML = `Erro: ${error.message}`
+                })
+
+                .finally(() => {
+                    toggleLoading(false);
                 })
         })
 })
